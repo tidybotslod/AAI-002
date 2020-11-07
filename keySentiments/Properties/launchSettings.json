@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "keySentiments": {
+      "commandName": "Project",
+      "commandLineArgs": "-o foo.txt"
+    }
+  }
+}
