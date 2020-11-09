@@ -2,8 +2,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using keySentiments;
-using System.Linq.Expressions;
-using System.Security.Cryptography;
 
 namespace UnitTests
 {
