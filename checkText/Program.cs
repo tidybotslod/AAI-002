@@ -4,7 +4,7 @@ using System.CommandLine.Invocation;
 using System.IO;
 using AAI;
 
-namespace keySentiments
+namespace checkText
 {
     public class Program
     {
@@ -36,23 +36,22 @@ namespace keySentiments
             } while (reader.EndOfStream == false);
         }
 
-
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
             var rootCommand = new RootCommand
             {
-              new Option<string>(
+                new Option<string>(
                     new string [] { "-i", "--inputFile" },
-                    description: "Optionally specify an input file, if no file is specified read from stdin"),
-              new Option<string>(
-                  new string [] { "-o", "--outputFile" },
-                  description: "Optionally specify an output file, if no fie is spedified write to stdout"),
-              new Option<bool>(
-                  new string [] { "-p", "--prompt" },
-                  description: "Optionally prompt for input from the command line")
+                    description: "Optionally specify an input file, if no file is specified read from stdin"), 
+                new Option<string>(
+                     new string [] { "-o", "--outputFile" },
+                     description: "Optionally specify an output file, if no file is specified write to stdout"),
+                new Option<bool>(
+                     new string [] { "-p", "--prompt" },
+                     description: "Optionally prompt for input from the command line")
             };
 
-            rootCommand.Description = "Analysis text for key words or for sentiment.  This could be used to categorize the text and maintain the statics on how well a topic is preceived. Writes out the sentiment, positive score, negative score, neutral, and finally";
+            rootCommand.Description = "Analyze text for key words or for measuring sentiment.  This could be used to categorize the text and maintain the statistcs for how well a topic or product is perceived. Writes out the sentiment, positive score, negative score, neutral score and finally the keywords found.";
 
             rootCommand.Handler = CommandHandler.Create<string, string, bool>((inputFile, outputFile, prompt) =>
             {

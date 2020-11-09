@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
-using keySentiments;
+using checkText;
 
 namespace UnitTests
 {
@@ -14,8 +14,10 @@ namespace UnitTests
             internal string[] answer;
         }
 
-        private static TestCase[] testCases = {
-            new TestCase {
+        private static TestCase[] testCases =
+        {
+            new TestCase
+            {
                 input  = new string[] { "The quick brown fox jumps over the lazy dog" },
                 answer = new string[] { "Negative, 0.00, 0.99, 0.01, \"quick brown fox jumps\", \"lazy dog\"" }
             }
@@ -76,7 +78,6 @@ namespace UnitTests
 
         [TestMethod]
         [DataRow(0, DisplayName = "PromptForLine1")]
-
         public void testPromptForInput(int testNumber)
         {
             Program app = new Program();
@@ -86,7 +87,7 @@ namespace UnitTests
                 {
                     try
                     {
-                        // Write out the test case to a stream 
+                        // Write out the test case to a stream
                         loadStream(source, testNumber);
 
                         // Create a TextReader over the memory stream and replace the input stream used by the console

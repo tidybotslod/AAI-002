@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\keySentiments\keySentiments.csproj" />
+    <ProjectReference Include="..\checkText\checkText.csproj" />
   </ItemGroup>
 
 </Project>
