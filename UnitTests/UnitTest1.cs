@@ -8,58 +8,23 @@ namespace UnitTests
     [TestClass]
     public class UnitTest1
     {
-        class TestCase
-        {
-            internal string[] input;
-            internal string[] answer;
-        }
-
-        private static TestCase[] testCases =
-        {
-            new TestCase
-            {
-                input  = new string[] { "The quick brown fox jumps over the lazy dog" },
-                answer = new string[] { "Negative, 0.00, 0.99, 0.01, \"quick brown fox jumps\", \"lazy dog\"" }
-            }
-        };
-
-        private void loadStream(Stream load, int testNumber)
-        {
-            StreamWriter writer = new StreamWriter(load, Console.OutputEncoding);
-            for (int line = 0; line < testCases[testNumber].input.Length; line++)
-            {
-                writer.WriteLine(testCases[testNumber].input[line]);
-                writer.Flush();
-                load.Seek(0, SeekOrigin.Begin);
-            }
-        }
-
-        private void checkOutput(Stream sink, int testNumber)
-        {
-            // Rewind the output, allows it to be read in.
-            sink.Seek(0, SeekOrigin.Begin);
-
-            // Read back the results line by line and compare them to what is expected.
-            StreamReader output = new StreamReader(sink, Console.InputEncoding);
-            for (int line = 0; line < testCases[testNumber].answer.Length; line++)
-            {
-                string value = output.ReadLine();
-                // Make sure the same value came back;
-                Assert.AreEqual(testCases[testNumber].answer[line], value);
-            }
-        }
-
         [TestMethod]
-        [DataRow(0, DisplayName = "StreamLine1")]
-        public void testStreamData(int testNumber)
+        public void testStreamData()
         {
+            string input = "The quick brown fox jumps over the lazy dog";
+            string answer = "Negative, 0.00, 0.99, 0.01, \"quick brown fox jumps\", \"lazy dog\"";
+
             Program app = new Program();
             using (MemoryStream source = new MemoryStream())
             {
+                // Create a stream containing the test phrase
+                StreamWriter writer = new StreamWriter(source, Console.OutputEncoding);
+                writer.WriteLine(input);
+                writer.Flush();
+                source.Seek(0, SeekOrigin.Begin);
+
                 using (MemoryStream sink = new MemoryStream())
                 {
-                    // Write out the test case to a stream
-                    loadStream(source, testNumber);
 
                     // Create a TextReader over the stream, data will be pulled here
                     StreamReader reader = new StreamReader(source, Console.InputEncoding);
@@ -71,15 +36,23 @@ namespace UnitTests
                     app.StreamData(reader, result);
 
                     // Evaulate result
-                    checkOutput(sink, testNumber);
+                    sink.Seek(0, SeekOrigin.Begin);
+                    StreamReader output = new StreamReader(sink, Console.InputEncoding);
+                    string value = output.ReadLine();
+                    Assert.AreEqual(answer, value);
                 }
             }
         }
 
         [TestMethod]
-        [DataRow(0, DisplayName = "PromptForLine1")]
-        public void testPromptForInput(int testNumber)
+        public void testPromptForInput()
         {
+            // Testing input from the console is accomplished by replacing the input stream use in Console
+            // with a memory stream containing one line.
+
+            string input = "The quick brown fox jumps over the lazy dog";
+            string answer = "Negative, 0.00, 0.99, 0.01, \"quick brown fox jumps\", \"lazy dog\"";
+
             Program app = new Program();
             using (MemoryStream source = new MemoryStream())
             {
@@ -87,8 +60,11 @@ namespace UnitTests
                 {
                     try
                     {
-                        // Write out the test case to a stream
-                        loadStream(source, testNumber);
+                        // Create a stream containing the test phrase
+                        StreamWriter writer = new StreamWriter(source, Console.OutputEncoding);
+                        writer.WriteLine(input);
+                        writer.Flush();
+                        source.Seek(0, SeekOrigin.Begin);
 
                         // Create a TextReader over the memory stream and replace the input stream used by the console
                         TextReader reader = new StreamReader(source, Console.InputEncoding);
@@ -101,7 +77,10 @@ namespace UnitTests
                         app.PromptForInput(result);
 
                         // Test if the output lines match what is expected
-                        checkOutput(sink, testNumber);
+                        sink.Seek(0, SeekOrigin.Begin);
+                        StreamReader output = new StreamReader(sink, Console.InputEncoding);
+                        string value = output.ReadLine();
+                        Assert.AreEqual(answer, value);
                     }
                     finally
                     {
