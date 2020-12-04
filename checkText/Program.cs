@@ -42,7 +42,7 @@ namespace checkText
             {
                 new Option<string>(
                     new string [] { "-i", "--inputFile" },
-                    description: "Optionally specify an input file, if no file is specified read from stdin"), 
+                    description: "Optionally specify an input file, if no file is specified read from stdin"),
                 new Option<string>(
                      new string [] { "-o", "--outputFile" },
                      description: "Optionally specify an output file, if no file is specified write to stdout"),
@@ -58,17 +58,12 @@ namespace checkText
                 StreamReader input = null;
                 StreamWriter output = null;
 
-                if (inputFile != null)
-                {
-                    input = File.OpenText(inputFile);
-                }
-
+                Program azureAccess = new Program();
                 if (outputFile != null)
                 {
                     output = File.AppendText(outputFile);
                 }
-                Program azureAccess = new Program();
-                if (output == null)
+                else
                 {
                     output = new StreamWriter(Console.OpenStandardOutput(), Console.OutputEncoding);
                 }
@@ -79,7 +74,11 @@ namespace checkText
                 }
                 else
                 {
-                    if (inputFile == null)
+                    if (inputFile != null)
+                    {
+                        input = File.OpenText(inputFile);
+                    }
+                    else
                     {
                         input = new StreamReader(Console.OpenStandardInput(), Console.InputEncoding);
                     }
